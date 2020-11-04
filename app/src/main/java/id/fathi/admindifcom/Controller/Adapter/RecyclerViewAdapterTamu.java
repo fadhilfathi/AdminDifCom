@@ -1,20 +1,16 @@
-package id.fathi.admindifcom;
+package id.fathi.admindifcom.Controller.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,10 +19,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
+
+import id.fathi.admindifcom.API.JavaMailAPI;
+import id.fathi.admindifcom.Model.Tamu;
+import id.fathi.admindifcom.Model.User;
+import id.fathi.admindifcom.R;
 
 public class RecyclerViewAdapterTamu extends RecyclerView.Adapter<RecyclerViewAdapterTamu.RecycleViewHolder> {
 
@@ -103,6 +108,8 @@ public class RecyclerViewAdapterTamu extends RecyclerView.Adapter<RecyclerViewAd
                                             mData.get(vholder.getAdapterPosition()).getNama(), mData.get(vholder.getAdapterPosition()).getTtl(), mData.get(vholder.getAdapterPosition()).getNik(),
                                             mData.get(vholder.getAdapterPosition()).getJeniskelamin(), mData.get(vholder.getAdapterPosition()).getAlamat(), mData.get(vholder.getAdapterPosition()).getPekerjaan(),
                                             mData.get(vholder.getAdapterPosition()).getNohp(), 0.0, 0.0, "Tidak Perlu Pendamping");
+                                    JavaMailAPI javaMailAPI = new JavaMailAPI(mContext, mData.get(vholder.getAdapterPosition()).getEmail(), "Diffable Companion", "Selamat pendaftaran anda pada Diffable Companion telah diterima");
+                                    javaMailAPI.execute();
                                     databaseReferenceDifabel.child(temp.getUid()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -122,6 +129,8 @@ public class RecyclerViewAdapterTamu extends RecyclerView.Adapter<RecyclerViewAd
                                             mData.get(vholder.getAdapterPosition()).getNama(), mData.get(vholder.getAdapterPosition()).getTtl(), mData.get(vholder.getAdapterPosition()).getNik(),
                                             mData.get(vholder.getAdapterPosition()).getJeniskelamin(), mData.get(vholder.getAdapterPosition()).getAlamat(), mData.get(vholder.getAdapterPosition()).getPekerjaan(),
                                             mData.get(vholder.getAdapterPosition()).getNohp(), 0.0, 0.0, "Tidak Tersedia");
+                                    JavaMailAPI javaMailAPI = new JavaMailAPI(mContext, mData.get(vholder.getAdapterPosition()).getEmail(), "Diffable Companion", "Selamat pendaftaran anda pada Diffable Companion telah diterima");
+                                    javaMailAPI.execute();
                                     databaseReferencePendamping.child(temp.getUid()).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -131,6 +140,20 @@ public class RecyclerViewAdapterTamu extends RecyclerView.Adapter<RecyclerViewAd
                                 }
                             });
                         }
+                        Query query = databaseReference.orderByChild("email").equalTo(mData.get(vholder.getAdapterPosition()).getEmail());
+                        query.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                                    dataSnapshot1.getRef().removeValue();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
 

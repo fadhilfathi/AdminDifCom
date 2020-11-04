@@ -1,10 +1,11 @@
-package id.fathi.admindifcom;
+package id.fathi.admindifcom.Model;
 
-public class Pendamping {
+public class User {
 
     private String id, email, password, nama, ttl, nik, jeniskelamin, alamat, pekerjaan, nohp, status;
+    private Double latitude, longitude;
 
-    public Pendamping(String id, String email, String password, String nama, String ttl, String nik, String jeniskelamin, String alamat, String pekerjaan, String nohp, String status) {
+    public User(String id, String email, String password, String nama, String ttl, String nik, String jeniskelamin, String alamat, String pekerjaan, String nohp, Double latitude, Double longitude, String status) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -15,10 +16,12 @@ public class Pendamping {
         this.alamat = alamat;
         this.pekerjaan = pekerjaan;
         this.nohp = nohp;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.status = status;
     }
 
-    public Pendamping(){
+    public User() {
 
     }
 
@@ -108,5 +111,21 @@ public class Pendamping {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

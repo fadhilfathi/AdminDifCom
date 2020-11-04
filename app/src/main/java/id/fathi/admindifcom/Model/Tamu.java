@@ -1,4 +1,4 @@
-package id.fathi.admindifcom;
+package id.fathi.admindifcom.Model;
 
 public class Tamu {
 
